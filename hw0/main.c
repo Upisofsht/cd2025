@@ -17,24 +17,63 @@ Node* createNode(char ch) {
     return node;
 }
 
-void addChar(Node *head, char c) {
-    if (head == NULL) {
-        Node *new_node = createNode(c);
-        new_node->count++;
-        head = new_node;
+void addChar(Node **head, char c) {
+    if (*head == NULL) {
+        *head = createNode(c);
+        return;
+    }
+    
+    Node *temp = *head;
+    while (temp != NULL) {
+        if (temp->ch == c) {
+            temp->count++;
+            return;
+        }
+        if (temp->next == NULL) {
+            temp->next = createNode(c);
+            return;
+        }
+        temp = temp->next;
+    }
+}
+Node* createListFromFile(FILE *fptr) {
+    Node *head = NULL;
+    int ch;
+    while ((ch = fgetc(fptr)) != EOF) {
+        addChar(&head, (char)ch);
+    }
+    return head;
+}
+
+void printList(Node *head) {
+    Node *temp = head;
+    while(temp != NULL) {
+        printf("'%c': %d\n", temp->ch, temp->count);
+        temp = temp->next;
     }
 }
 
-int main(void) {
+void freeList(Node *head) {
+    Node *temp;
+    while(head != NULL) {
+        temp = head;
+        head = head->next;
+        free(temp);
+    }
+}
+
+int main() {
     FILE *fptr = fopen("main.c", "r");
     if (fptr == NULL) { 
         perror("Failed to open file");
         return 1;
     }
-    int ch;
-    while ((ch = fgetc(fptr)) != EOF) {
-        putchar(ch);
-    }
+    
+    Node *list = createListFromFile(fptr);
     fclose(fptr);
+    
+    printList(list);
+    freeList(list);
+    
     return 0;
 }
