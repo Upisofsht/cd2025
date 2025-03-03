@@ -1,17 +1,40 @@
 #include <stdio.h>
-#include <string.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    char ch;
+    int count;
+    struct Node *next;
+}Node;
+
+Node* createNode(char ch) {
+    Node *node = malloc(sizeof(Node));
+    if (node != NULL) {
+        node->ch = ch;
+        node->count = 0;
+        node->next = NULL;
+    }
+    return node;
+}
+
+void addChar(Node *head, char c) {
+    if (head == NULL) {
+        Node *new_node = createNode(c);
+        new_node->count++;
+        head = new_node;
+    }
+}
 
 int main(void) {
-    char *str = malloc(100 * sizeof(char));
-    if (str == NULL) {                     // 檢查是否配置成功
-        perror("Failed to allocate memory");
+    FILE *fptr = fopen("main.c", "r");
+    if (fptr == NULL) { 
+        perror("Failed to open file");
         return 1;
     }
-    // FILE *fptr;
-    // fptr = fopen("main.c", "r");
-    // fscanf(fptr, "%s", *str);
-
-    // fclose(fptr);
-    // printf("%s", *str);
+    int ch;
+    while ((ch = fgetc(fptr)) != EOF) {
+        putchar(ch);
+    }
+    fclose(fptr);
     return 0;
 }
