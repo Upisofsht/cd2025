@@ -11,7 +11,7 @@ Node* createNode(char ch) {
     Node *node = malloc(sizeof(Node));
     if (node != NULL) {
         node->ch = ch;
-        node->count = 0;
+        node->count = 1;
         node->next = NULL;
     }
     return node;
