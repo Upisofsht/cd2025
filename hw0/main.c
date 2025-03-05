@@ -48,6 +48,7 @@ Node* createListFromFile(FILE *fptr) {
 void printList(Node *head) {
     Node *temp = head;
     while(temp != NULL) {
+        printf("'%c': %d\n", temp->ch, temp->count);
         temp = temp->next;
     }
 }
